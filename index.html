@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ANNOYING DATE INVITATION 💗</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Quicksand:wght@500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: '#ffb3ba',
+                        pastelLavender: '#e3d7ff',
+                        pastelCream: '#fff5e4',
+                        pastelBlue: '#bae1ff',
+                        pastelPeach: '#ffdfba',
+                        softMint: '#baffc9',
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        quicksand: ['Quicksand', 'sans-serif'],
+                        marker: ['Permanent Marker', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 5s ease-in-out 2s infinite; }
+        .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+        
+        body {
+            background-color: #fff5e4;
+            background-image: radial-gradient(#ffb3ba 1px, transparent 1px), radial-gradient(#bae1ff 1px, #fff5e4 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .scrapbook-card {
+            background: #ffffff;
+            border: 3px solid #333333;
+            box-shadow: 6px 6px 0px #333333;
+            border-radius: 24px;
+            transition: all 0.2s ease;
+        }
+        .scrapbook-card:hover {
+            box-shadow: 8px 8px 0px #333333;
+            transform: translate(-2px, -2px);
+        }
+
+        .stamp-badge {
+            transform: rotate(-3deg);
+            border: 2px dashed #ffb3ba;
+            background: #fff5e4;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 flex flex-col items-center justify-center p-4 selection:bg-pastelPink">
+
+    <!-- FLOATING DECORATIONS -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-10 left-10 text-4xl animate-float">💖</div>
+        <div class="absolute top-20 right-16 text-3xl animate-float-delayed">✨</div>
+        <div class="absolute bottom-12 left-20 text-4xl animate-float">🌷</div>
+        <div class="absolute bottom-24 right-20 text-3xl animate-float-delayed">⭐</div>
+        <div class="absolute top-1/2 left-4 text-3xl animate-float">🎀</div>
+        <div class="absolute top-1/3 right-8 text-4xl animate-float-delayed">🍓</div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main id="app-container" class="relative z-10 w-full max-w-xl mx-auto">
+
+        <!-- 1. OPENING SCREEN -->
+        <section id="screen-welcome" class="scrapbook-card p-8 sm:p-10 text-center relative overflow-hidden">
+            <div class="absolute -top-6 -right-6 bg-pastelPink w-24 h-24 rounded-full opacity-50 z-0"></div>
+            
+            <div class="relative z-10">
+                <span class="inline-block bg-pastelLavender px-4 py-1.5 rounded-full text-xs font-bold tracking-wider stamp-badge mb-4">
+                    ⚠️ CRITICAL MISSION DETECTED
+                </span>
+
+                <h1 class="font-fredoka text-4xl sm:text-5xl font-bold text-gray-900 mb-3 tracking-wide">
+                    HEY YOU! 💗
+                </h1>
+                
+                <p class="font-fredoka text-lg sm:text-xl text-gray-600 mb-6">
+                    Someone wants to take you out... but there's just one tiny problem.
+                </p>
+
+                <!-- Animated Mascot Box -->
+                <div class="my-6 bg-pastelCream border-2 border-dashed border-gray-400 p-6 rounded-2xl inline-block animate-pulse-slow">
+                    <div class="text-6xl mb-2 animate-bounce">🥺❔</div>
+                    <p class="text-sm font-semibold text-gray-600">
+                        He doesn't know where to go.<br>And honestly, he's hoping you're smarter than him.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+                    <button onclick="startQuiz()" class="w-full sm:w-auto bg-pastelPink hover:bg-[#ff99a4] text-gray-900 font-fredoka font-bold text-lg px-8 py-4 rounded-2xl border-2 border-gray-900 shadow-[4px_4px_0px_#333] hover:shadow-[6px_6px_0px_#333] transition-all transform hover:-translate-y-1">
+                        LET'S FIX HIS PROBLEM ✨
+                    </button>
+                    
+                    <button id="btn-decline" onmouseover="dodgeDeclineButton(this)" onclick="handleDecline()" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-500 font-medium text-sm px-4 py-3 rounded-2xl border border-gray-300 transition-all">
+                        Not interested?
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. QUIZ SCREEN (Hidden initially) -->
+        <section id="screen-quiz" class="scrapbook-card p-6 sm:p-8 hidden relative">
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center text-xs font-bold text-gray-500 mb-2 font-fredoka">
+                    <span id="quiz-progress-text">LEVEL 1 / 5</span>
+                    <span>VIBE CHECK 🎯</span>
+                </div>
+                <div class="w-full bg-gray-100 h-4 rounded-full border-2 border-gray-900 overflow-hidden p-0.5">
+                    <div id="quiz-progress-bar" class="bg-pastelPink h-full rounded-full transition-all duration-300 w-1/5"></div>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div id="quiz-question-container" class="min-h-[220px] flex flex-col justify-center">
+                <h2 id="quiz-question-title" class="font-fredoka text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">
+                    What's your ideal date atmosphere?
+                </h2>
+                
+                <div id="quiz-options" class="grid grid-cols-1 gap-3">
+                    <!-- Dynamic options injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ANNOYING DECISION SCREEN (Hidden initially) -->
+        <section id="screen-annoying" class="scrapbook-card p-6 sm:p-8 hidden text-center relative">
+            <span class="inline-block bg-pastelPeach px-4 py-1.5 rounded-full text-xs font-bold tracking-wider stamp-badge mb-4">
+                🧠 SYSTEM OVERLOAD
+            </span>
+
+            <h2 class="font-fredoka text-3xl font-bold text-gray-900 mb-4">
+                Time to make a choice!
+            </h2>
+            <p class="text-gray-600 mb-8">
+                Since he has zero decision-making skills, you have to pick for him. Or... do you? 😏
+            </p>
+
+            <div class="flex flex-col gap-4 items-center justify-center my-6">
+                <button onclick="proceedToDestination()" class="w-full max-w-sm bg-softMint hover:bg-[#a3f7b5] text-gray-900 font-fredoka font-bold text-lg px-6 py-4 rounded-2xl border-2 border-gray-900 shadow-[4px_4px_0px_#333] transition-all">
+                    I'll pick the date spot myself! 👑
+                </button>
+
+                <!-- THE RUNAWAY BUTTON -->
+                <div class="relative w-full h-20 flex items-center justify-center">
+                    <button id="runaway-btn" onmouseover="teleportButton(this)" ontouchstart="teleportButton(this)" onclick="handleRunawayClick()" class="absolute bg-pastelLavender hover:bg-[#d0bfff] text-gray-900 font-fredoka font-bold text-base px-6 py-3 rounded-2xl border-2 border-gray-900 shadow-[3px_3px_0px_#333] transition-transform duration-100 cursor-pointer select-none">
+                        I DON'T KNOW, YOU DECIDE. 🏃💨
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mystery Box Trigger -->
+            <div class="mt-8 pt-6 border-t-2 border-dashed border-gray-200">
+                <p class="text-xs font-bold text-gray-500 mb-3 font-fredoka">🎁 BONUS MYSTERY BOX (CLICK ME)</p>
+                <div onclick="openMysteryBox()" class="inline-block text-4xl cursor-pointer bg-pastelCream p-4 rounded-2xl border-2 border-gray-900 shadow-[3px_3px_0px_#333] hover:rotate-6 transition-transform">
+                    📦
+                </div>
+                <p id="mystery-result" class="text-xs font-semibold text-pastelBlue mt-2 min-h-[20px]"></p>
+            </div>
+        </section>
+
+        <!-- 4. DESTINATION SELECTION SCREEN (Hidden initially) -->
+        <section id="screen-destination" class="scrapbook-card p-6 sm:p-8 hidden">
+            <div class="text-center mb-6">
+                <span class="inline-block bg-pastelBlue px-4 py-1.5 rounded-full text-xs font-bold tracking-wider stamp-badge mb-2">
+                    ✨ FINAL STEP ✨
+                </span>
+                <h2 class="font-fredoka text-3xl font-bold text-gray-900">
+                    Choose Your Vibe Destination!
+                </h2>
+                <p class="text-sm text-gray-600 mt-1">
+                    Select your favorite spot(s) for the big date. Pick wisely!
+                </p>
+            </div>
+
+            <div id="destination-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[360px] overflow-y-auto pr-1 mb-6">
+                <!-- Injected Destination Cards -->
+            </div>
+
+            <button onclick="finalizeDate()" class="w-full bg-pastelPink hover:bg-[#ff99a4] text-gray-900 font-fredoka font-bold text-lg py-4 rounded-2xl border-2 border-gray-900 shadow-[4px_4px_0px_#333] transition-all">
+                LOCK IN THIS DATE! 💌
+            </button>
+        </section>
+
+        <!-- 5. SUCCESS SCREEN (Hidden initially) -->
+        <section id="screen-success" class="scrapbook-card p-8 sm:p-10 hidden text-center">
+            <div class="text-6xl mb-4">🎉✨🥂</div>
+            <h2 class="font-fredoka text-4xl font-bold text-gray-900 mb-3">
+                IT'S A DATE!
+            </h2>
+            <p id="success-summary" class="text-gray-700 text-base mb-6 font-medium">
+                Mission accomplished! Your date profile has been safely delivered to his extremely empty brain.
+            </p>
+            <div class="bg-pastelCream p-4 rounded-2xl border-2 border-gray-900 mb-6 text-sm font-bold text-gray-800">
+                Status: He is currently panicking and picking out his outfit. 👔🏃‍♂️
+            </div>
+            <button onclick="resetApp()" class="bg-pastelLavender hover:bg-[#d0bfff] text-gray-900 font-fredoka font-bold text-sm px-6 py-3 rounded-2xl border-2 border-gray-900 shadow-[3px_3px_0px_#333]">
+                Do it again for fun 🔄
+            </button>
+        </section>
+
+    </main>
+
+    <!-- FLOATING NOTIFICATION TOAST -->
+    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 bg-white border-2 border-gray-900 shadow-[4px_4px_0px_#333] px-5 py-3 rounded-2xl transform translate-y-32 opacity-0 transition-all duration-300 flex items-center gap-3">
+        <span id="toast-icon" class="text-2xl">💡</span>
+        <div>
+            <p class="font-fredoka font-bold text-xs text-gray-400">NOTIFICATION</p>
+            <p id="toast-msg" class="text-sm font-semibold text-gray-800">Psst... you're doing great!</p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // State Management
+        let currentQuizIndex = 0;
+        let runawayAttempts = 0;
+        let selectedDestinations = [];
+
+        const quizQuestions = [
+            {
+                title: "What's your ideal date atmosphere?",
+                options: [
+                    { text: "🌷 Cute and romantic", vibe: "romantic" },
+                    { text: "🌊 Somewhere peaceful", vibe: "peaceful" },
+                    { text: "🎡 Fun and adventurous", vibe: "adventurous" },
+                    { text: "🍰 Food and endless conversations", vibe: "foodie" },
+                    { text: "🎬 Spontaneous and unpredictable", vibe: "chaotic" }
+                ]
+            },
+            {
+                title: "Pick your date energy!",
+                options: [
+                    { text: "👑 Princess treatment", vibe: "princess" },
+                    { text: "✨ Main character energy", vibe: "main_character" },
+                    { text: "🤪 Chaotic but fun", vibe: "fun" },
+                    { text: "☕ Chill and cozy", vibe: "chill" }
+                ]
+            },
+            {
+                title: "What are you craving right now?",
+                options: [
+                    { text: "🧁 Something sweet", vibe: "sweet" },
+                    { text: "🍟 Something savory", vibe: "savory" },
+                    { text: "🧋 A refreshing drink", vibe: "drink" },
+                    { text: "🎁 Surprise me!", vibe: "surprise" }
+                ]
+            },
+            {
+                title: "Choose your perfect scenery.",
+                options: [
+                    { text: "🌅 Beach sunset", vibe: "beach" },
+                    { text: "☕ Cozy café", vibe: "cafe" },
+                    { text: "🌿 Beautiful nature", vibe: "nature" },
+                    { text: "🏙️ City lights", vibe: "city" },
+                    { text: "🛸 Somewhere unexpected", vibe: "weird" }
+                ]
+            },
+            {
+                title: "How far are you willing to go?",
+                options: [
+                    { text: "🏠 Nearby, please!", vibe: "local" },
+                    { text: "🚗 A little road trip sounds fun.", vibe: "trip" },
+                    { text: "🚀 Anywhere, as long as it's worth it.", vibe: "anywhere" }
+                ]
+            }
+        ];
+
+        const destinations = [
+            { id: 1, title: "☕ Aesthetic Café Hopping", desc: "Good coffee, pastries, and deep chats.", icon: "☕" },
+            { id: 2, title: "🌊 Beach Sunset Walk", desc: "Salty breeze, ocean views, and twilight.", icon: "🌊" },
+            { id: 3, title: "🍰 Dessert Hunting", desc: "Cake, ice cream, and sugar rush.", icon: "🍰" },
+            { id: 4, title: "🍜 Late-Night Food Adventure", desc: "Street food and midnight cravings.", icon: "🍜" },
+            { id: 5, title: "🌿 Botanical Garden Escape", desc: "Greenery, fresh air, and quiet corners.", icon: "🌿" },
+            { id: 6, title: "🎳 Arcade & Fun Activities", desc: "Friendly competition and arcade games.", icon: "🎳" },
+            { id: 7, title: "🎬 Cozy Movie Night", desc: "Popcorn, blankets, and cinematic vibes.", icon: "🎬" },
+            { id: 8, title: "🎁 Total Mystery Destination", desc: "Blindfolded adventure (well, almost).", icon: "🛸" }
+        ];
+
+        const toastMessages = [
+            "Psst... you're doing great!",
+            "Are you sure that's your final answer?",
+            "He is still waiting, you know.",
+            "Plot twist: he actually wants to see you.",
+            "Don't leave him hanging!"
+        ];
+
+        // Toast Notification System
+        function showToast(msg = null) {
+            const toast = document.getElementById('toast-notification');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.textContent = msg || toastMessages[Math.floor(Math.random() * toastMessages.length)];
+            
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3500);
+        }
+
+        // Periodic random toasts
+        setInterval(() => {
+            if (Math.random() > 0.6) showToast();
+        }, 15000);
+
+        // Decline Button Dodger
+        function dodgeDeclineButton(btn) {
+            const randomX = (Math.random() - 0.5) * 120;
+            const randomY = (Math.random() - 0.5) * 60;
+            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        function handleDecline() {
+            alert("Nice try! But you can't escape this date invitation so easily! 😜");
+        }
+
+        // Start Quiz
+        function startQuiz() {
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            renderQuizQuestion();
+            showToast("Let's test your date compatibility!");
+        }
+
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-progress-text').textContent = `LEVEL ${currentQuizIndex + 1} / 5`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQuizIndex + 1) / 5) * 100}%`;
+            document.getElementById('quiz-question-title').textContent = q.title;
+
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = '';
+
+            q.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left bg-pastelCream hover:bg-pastelPeach font-fredoka font-semibold text-gray-800 p-4 rounded-2xl border-2 border-gray-900 shadow-[3px_3px_0px_#333] hover:shadow-[4px_4px_0px_#333] transition-all transform hover:-translate-y-0.5';
+                btn.textContent = opt.text;
+                btn.onclick = () => handleAnswerSelected();
+                container.appendChild(btn);
+            });
+        }
+
+        function handleAnswerSelected() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                // Quiz completed, transition to Annoying Screen
+                document.getElementById('screen-quiz').classList.add('hidden');
+                document.getElementById('screen-annoying').classList.remove('hidden');
+                showToast("Analyzing your incredible date personality...");
+            }
+        }
+
+        // Runaway Button Mechanics
+        const runawayTexts = [
+            "Nice try!",
+            "Too slow!",
+            "You really thought?",
+            "HAHAHA, NOPE!",
+            "Catch me if you can!"
+        ];
+
+        function teleportButton(btn) {
+            runawayAttempts++;
+            const x = (Math.random() - 0.5) * 240;
+            const y = (Math.random() - 0.5) * 120;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+            
+            if (runawayAttempts % 2 === 0) {
+                btn.textContent = runawayTexts[Math.floor(Math.random() * runawayTexts.length)];
+            }
+
+            if (runawayAttempts >= 5) {
+                btn.textContent = "Okay fine, click me! 😭";
+                btn.style.backgroundColor = "#baffc9";
+            }
+        }
+
+        function handleRunawayClick() {
+            proceedToDestination();
+        }
+
+        // Mystery Box Generator
+        const mysteryRewards = [
+            "🌷 Virtual flowers unlocked!",
+            "✨ Compliment: You have immaculate vibes.",
+            "💌 Secret Hint: He is extremely nervous.",
+            "🏆 Achievement Unlocked: Professional Clicker.",
+            "🍓 Extra snack points awarded!"
+        ];
+
+        function openMysteryBox() {
+            const resultEl = document.getElementById('mystery-result');
+            const randomReward = mysteryRewards[Math.floor(Math.random() * mysteryRewards.length)];
+            resultEl.textContent = randomReward;
+            showToast("Mystery box opened!");
+        }
+
+        // Destination Selection Screen
+        function proceedToDestination() {
+            document.getElementById('screen-annoying').classList.add('hidden');
+            document.getElementById('screen-destination').classList.remove('hidden');
+            renderDestinations();
+            showToast("Select your dream date locations!");
+        }
+
+        function renderDestinations() {
+            const grid = document.getElementById('destination-grid');
+            grid.innerHTML = '';
+
+            destinations.forEach(dest => {
+                const card = document.createElement('div');
+                card.className = 'p-4 rounded-2xl border-2 border-gray-900 bg-pastelCream cursor-pointer transition-all flex items-center gap-4 hover:shadow-[3px_3px_0px_#333]';
+                card.dataset.id = dest.id;
+                card.innerHTML = `
+                    <div class="text-4xl bg-white p-3 rounded-xl border-2 border-gray-900">${dest.icon}</div>
+                    <div class="flex-1">
+                        <h4 class="font-fredoka font-bold text-gray-900 text-base">${dest.title}</h4>
+                        <p class="text-xs text-gray-600">${dest.desc}</p>
+                    </div>
+                    <div class="checkbox-indicator w-6 h-6 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center font-bold text-xs"></div>
+                `;
+
+                card.onclick = () => toggleDestination(dest.id, card);
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleDestination(id, cardElement) {
+            const indicator = cardElement.querySelector('.checkbox-indicator');
+            if (selectedDestinations.includes(id)) {
+                selectedDestinations = selectedDestinations.filter(item => item !== id);
+                cardElement.classList.remove('bg-pastelPink');
+                cardElement.classList.add('bg-pastelCream');
+                indicator.textContent = '';
+            } else {
+                selectedDestinations.push(id);
+                cardElement.classList.remove('bg-pastelCream');
+                cardElement.classList.add('bg-pastelPink');
+                indicator.textContent = '✓';
+            }
+        }
+
+        // Finalize Date
+        function finalizeDate() {
+            if (selectedDestinations.length === 0) {
+                alert("Please select at least one destination spot so he doesn't panic! 🥺");
+                return;
+            }
+
+            document.getElementById('screen-destination').classList.add('hidden');
+            document.getElementById('screen-success').classList.remove('hidden');
+
+            // Trigger confetti blast
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+
+            const chosen = destinations.filter(d => selectedDestinations.includes(d.id)).map(d => d.title).join(', ');
+            document.getElementById('success-summary').textContent = `Mission accomplished! Your chosen spots (${chosen}) have been recorded. Get ready for an amazing time!`;
+        }
+
+        // Reset App
+        function resetApp() {
+            currentQuizIndex = 0;
+            runawayAttempts = 0;
+            selectedDestinations = [];
+            document.getElementById('screen-success').classList.add('hidden');
+            document.getElementById('screen-welcome').classList.remove('hidden');
+            document.getElementById('runaway-btn').style.transform = 'translate(0px, 0px)';
+            document.getElementById('runaway-btn').textContent = "I DON'T KNOW, YOU DECIDE. 🏃💨";
+            document.getElementById('runaway-btn').style.backgroundColor = "#e3d7ff";
+            showToast("Welcome back for another round!");
+        }
+    </script>
+</body>
+</html>
